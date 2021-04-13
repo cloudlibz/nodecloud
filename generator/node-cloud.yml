@@ -103,6 +103,17 @@ Kubernetes:
     describeNodeGroup: eks.d.ts describeNodegroup
     listNodegroups: eks.d.ts listNodegroups
     updateConfig: eks.d.ts updateClusterConfig
+  DO:
+    create: kubernetes.d.ts create 
+    delete: kubernetes.d.ts delete
+    listClusters: kubernetes.d.ts getClusters
+    describeCluster: kubernetes.d.ts describeCluster
+    updateTags: kubernetes.d.ts tagResource
+    createNodeGroup: kubernetes.d.ts addNodePool
+    deleteNodegroup: kubernetes.d.ts deleteNodePool
+    describeNodeGroup: kubernetes.d.ts describeNodegroup
+    listNodegroups: kubernetes.d.ts getNodePools
+    updateConfig: kubernetes.d.ts updateClusterConfig   
 
 Monitoring:
   GCP:
