@@ -333,7 +333,8 @@ function generateClassBasedCode(methods, data, serviceName) {
       extractedData,
       groupedMethods,
       output,
-      filePath;
+      filePath,
+      dir;
     var _this = this;
     return __generator(this, function(_a) {
       switch (_a.label) {
@@ -403,16 +404,30 @@ function generateClassBasedCode(methods, data, serviceName) {
           ];
         case 3:
           output = _a.sent();
+          dir = helper_1.getDir(serviceName);
+          if (
+            !fs.existsSync(
+              process.cwd() + "/generatedClasses/googleCloud/" + dir
+            )
+          ) {
+            fs.mkdirSync(
+              process.cwd() + "/generatedClasses/googleCloud/" + dir
+            );
+          }
           if (/^[A-Z]*$/.test(serviceName)) {
             filePath =
               process.cwd() +
-              "/generatedClasses/googleCloud/gcp-" +
+              "/generatedClasses/googleCloud/" +
+              dir +
+              "/gcp-" +
               serviceName +
               ".js";
           } else {
             filePath =
               process.cwd() +
-              "/generatedClasses/googleCloud/gcp-" +
+              "/generatedClasses/googleCloud/" +
+              dir +
+              "/gcp-" +
               serviceName.charAt(0).toLowerCase() +
               serviceName.slice(1) +
               ".js";
@@ -425,7 +440,7 @@ function generateClassBasedCode(methods, data, serviceName) {
 }
 function generateClientBasedCode(methods, serviceName) {
   return __awaiter(this, void 0, void 0, function() {
-    var files, sdkFiles, groupedMethods, classData, output, filePath;
+    var files, sdkFiles, groupedMethods, classData, output, filePath, dir;
     var _this = this;
     return __generator(this, function(_a) {
       switch (_a.label) {
@@ -495,16 +510,30 @@ function generateClientBasedCode(methods, serviceName) {
           ];
         case 3:
           output = _a.sent();
+          dir = helper_1.getDir(serviceName);
+          if (
+            !fs.existsSync(
+              process.cwd() + "/generatedClasses/googleCloud/" + dir
+            )
+          ) {
+            fs.mkdirSync(
+              process.cwd() + "/generatedClasses/googleCloud/" + dir
+            );
+          }
           if (/^[A-Z]*$/.test(serviceName)) {
             filePath =
               process.cwd() +
-              "/generatedClasses/googleCloud/gcp-" +
+              "/generatedClasses/googleCloud/" +
+              dir +
+              "/gcp-" +
               serviceName +
               ".js";
           } else {
             filePath =
               process.cwd() +
-              "/generatedClasses/googleCloud/gcp-" +
+              "/generatedClasses/googleCloud/" +
+              dir +
+              "/gcp-" +
               serviceName.charAt(0).toLowerCase() +
               serviceName.slice(1) +
               ".js";

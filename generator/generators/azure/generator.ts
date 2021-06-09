@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { SyntaxKind, createSourceFile, ScriptTarget } from "typescript";
 import { getAST } from "../../parsers/azure/parser";
-import { groupers, filters, printFile } from "../lib/helper";
+import { groupers, filters, printFile, getDir } from "../lib/helper";
 import { transform } from "../../transformers/azure/transformer";
 
 interface FunctionData {
@@ -125,13 +125,24 @@ export async function generateAzureClass(serviceClass, serviceName) {
   classData.serviceName = serviceName;
   const output = await transform(dummyAst, classData);
   let filePath;
+  const dir = getDir(serviceName);
+  if (!fs.existsSync(process.cwd() + "/generatedClasses/Azure/" + dir)) {
+    fs.mkdirSync(process.cwd() + "/generatedClasses/Azure/" + dir);
+  }
   if (/^[A-Z]*$/.test(serviceName)) {
     filePath =
-      process.cwd() + "/generatedClasses/Azure/azure-" + serviceName + ".js";
+      process.cwd() +
+      "/generatedClasses/Azure/" +
+      dir +
+      "/azure-" +
+      serviceName +
+      ".js";
   } else {
     filePath =
       process.cwd() +
-      "/generatedClasses/Azure/azure-" +
+      "/generatedClasses/Azure/" +
+      dir +
+      "/azure-" +
       serviceName.charAt(0).toLowerCase() +
       serviceName.slice(1) +
       ".js";
