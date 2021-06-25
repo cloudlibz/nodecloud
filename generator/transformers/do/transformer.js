@@ -68,6 +68,9 @@ function runTransformation(sourceCode, transformMethod) {
 function toSourceFile(sourceCode) {
     return ts.createSourceFile("dummyClass.js", sourceCode, ts.ScriptTarget.Latest, true);
 }
+/*
+* The Transform function to be called from generator
+*/
 function transform(code, classData) {
     return __awaiter(this, void 0, void 0, function () {
         var addFunctions, addIdentifiers, addComments, node, result_1, result_2, result_3;
@@ -80,6 +83,8 @@ function transform(code, classData) {
                                 var functions_1 = [];
                                 classData.functions.map(function (method) {
                                     var clonedNode = Object.assign({}, node.members[1]);
+                                    // console.log("Cloned Node..........\n");//sdadas
+                                    // console.log(clonedNode);//asdasdasdasd
                                     clonedNode.name = ts.createIdentifier(method.functionName);
                                     functions_1.push(clonedNode);
                                 });
@@ -107,7 +112,7 @@ function transform(code, classData) {
                                 var updatedIdentifier = void 0;
                                 switch (node.text) {
                                     case "ClassName":
-                                        updatedIdentifier = ts.updateIdentifier(ts.createIdentifier("AWS_" + classData.serviceName));
+                                        updatedIdentifier = ts.updateIdentifier(ts.createIdentifier("DO_" + classData.serviceName));
                                         break;
                                     case "_sdkClassName":
                                         updatedIdentifier = ts.updateIdentifier(ts.createIdentifier("_" +
@@ -115,7 +120,8 @@ function transform(code, classData) {
                                             classData.className.substr(1)));
                                         break;
                                     case "SDKClassName":
-                                        updatedIdentifier = ts.updateIdentifier(ts.createIdentifier(classData.className));
+                                        updatedIdentifier = ts.updateIdentifier(ts.createIdentifier(classData.className.charAt(0).toLowerCase() +
+                                            classData.className.substr(1)));
                                         break;
                                     case "SDKFunctionName":
                                         updatedIdentifier = ts.updateIdentifier(ts.createIdentifier(classData.functions[count].SDKFunctionName));
@@ -143,17 +149,23 @@ function transform(code, classData) {
                         function visit(node) {
                             if (ts.isClassDeclaration(node)) {
                                 addMultiLineComment(node, "This is an auto generated class, please do not change.");
-                                var comment = "*\n * Class to create a " + classData.className + " object\n * @category AWS       \n ";
+                                var comment = "*\n* Class to create a " + classData.className + " object\n* @category Digital Ocean       \n";
                                 addMultiLineComment(node, comment);
                             }
                             if (ts.isMethodDeclaration(node)) {
                                 var parameters = classData.functions[count].params.map(function (param) {
                                     var statment;
                                     if (param.optional) {
-                                        statment = "* @param {" + param.typeName + "} [" + param.name + "] - Data required for " + classData.functions[count].SDKFunctionName;
+                                        if (param.type == "TypeReference")
+                                            statment = "* @param {" + param.typeName + "} " + param.name + " - Data required for " + classData.functions[count].SDKFunctionName;
+                                        else
+                                            statment = "* @param {" + param.type + "} " + param.name + " - Data required for " + classData.functions[count].SDKFunctionName;
                                     }
                                     else {
-                                        statment = "* @param {" + param.typeName + "} " + param.name + " - Data required for " + classData.functions[count].SDKFunctionName;
+                                        if (param.type == "TypeReference")
+                                            statment = "* @param {" + param.typeName + "} " + param.name + " - Data required for " + classData.functions[count].SDKFunctionName;
+                                        else
+                                            statment = "* @param {" + param.type + "} " + param.name + " - Data required for " + classData.functions[count].SDKFunctionName;
                                     }
                                     return statment;
                                 });
@@ -161,12 +173,12 @@ function transform(code, classData) {
                                 if (parameters.length > 0) {
                                     var paramStatments_1 = "";
                                     parameters.map(function (param) {
-                                        paramStatments_1 = paramStatments_1.concat(paramStatments_1 === "" ? "" + param : "\n " + param);
+                                        paramStatments_1 = paramStatments_1.concat(paramStatments_1 === "" ? "" + param : "\n" + param);
                                     });
-                                    comment = "*\n * Trigers the " + classData.functions[count].SDKFunctionName + " function of " + classData.className + "\n " + paramStatments_1 + "\n * @returns {Promise<" + classData.functions[count].SDKFunctionName + "Response>}\n ";
+                                    comment = "*\n* Trigers the " + classData.functions[count].SDKFunctionName + " function of " + classData.className + "\n" + paramStatments_1 + "\n* @returns {Promise<" + classData.functions[count].SDKFunctionName + "Response>}\n";
                                 }
                                 else {
-                                    comment = "*\n * Trigers the " + classData.functions[count].SDKFunctionName + " function of " + classData.className + "\n * @returns {Promise<" + classData.functions[count].SDKFunctionName + "Response>}\n ";
+                                    comment = "*\n* Trigers the " + classData.functions[count].SDKFunctionName + " function of " + classData.className + "\n* @returns {Promise<" + classData.functions[count].SDKFunctionName + "Response>}\n";
                                 }
                                 addMultiLineComment(node, comment);
                                 count++;

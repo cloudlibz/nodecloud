@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import { createSourceFile, ScriptTarget, SyntaxKind } from "typescript";
-import { getAST } from "../../parsers/aws/parser";
-import { transform } from "../../transformers/aws/transformer";
-import { filters, groupers, printFile, getDir } from "../lib/helper";
+import { getAST } from "../../parsers/do/parser";
+import { transform } from "../../transformers/do/transformer";
+import { printFile, getDir } from "../lib/helper";
+
 
 interface FunctionData {
   functionName: string;
@@ -22,7 +23,9 @@ interface ClassData {
   serviceName: string;
 }
 
-const dummyFile = process.cwd() + "/dummyClasses/aws.js";
+const dummyFile = process.cwd() + "/dummyClasses/do.js";
+
+
 const dummyAst = createSourceFile(
   dummyFile,
   fs.readFileSync(dummyFile).toString(),
@@ -38,8 +41,10 @@ export function extractSDKData(sdkClassAst, serviceClass) {
     functions.push(serviceClass[key].split(" ")[1]);
   });
 
+
   sdkClassAst.members.map(method => {
     if (method.name && functions.includes(method.name.text)) {
+
       let name;
       Object.keys(serviceClass).map((key, index) => {
         if (serviceClass[key].split(" ")[1] === method.name.text) {
@@ -58,7 +63,7 @@ export function extractSDKData(sdkClassAst, serviceClass) {
           };
 
           if (parameter.type === "TypeReference" && param.type.typeName) {
-            parameter.typeName = param.type.typeName.right.text;
+            parameter.typeName = param.type.typeName.text;
           }
 
           parameters.push(parameter);
@@ -73,9 +78,6 @@ export function extractSDKData(sdkClassAst, serviceClass) {
     }
   });
 
-  const groupedMethods = groupers.aws(methods);
-  methods = filters.aws(groupedMethods);
-
   const classData: ClassData = {
     className: sdkClassAst.name.text,
     functions: methods,
@@ -85,33 +87,30 @@ export function extractSDKData(sdkClassAst, serviceClass) {
   return classData;
 }
 
-export function generateAWSClass(serviceClass, serviceName) {
+export function generateDOClass(serviceClass, serviceName) {
   const sdkFile = serviceClass[Object.keys(serviceClass)[0]].split(" ")[0];
   getAST(sdkFile).then(async result => {
-    const sdkClassAst = result;
+  const sdkClassAst = result;
     try {
       const classData: ClassData = extractSDKData(sdkClassAst, serviceClass);
       classData.serviceName = serviceName;
       const output = await transform(dummyAst, classData);
       let filePath;
       const dir = getDir(serviceName);
-      if (!fs.existsSync(process.cwd() + "/generatedClasses/AWS/" + dir)) {
-        fs.mkdirSync(process.cwd() + "/generatedClasses/AWS/" + dir);
+      if (!fs.existsSync(process.cwd() + "/generatedClasses/DO/" + dir)) {
+        fs.mkdirSync(process.cwd() + "/generatedClasses/DO/" + dir);
       }
       if (/^[A-Z]*$/.test(serviceName)) {
         filePath =
-          process.cwd() +
-          "/generatedClasses/AWS/" +
-          dir +
-          "/aws-" +
-          serviceName +
-          ".js";
+          process.cwd() + "/generatedClasses/DO/"+
+          dir+
+          "/do-" + serviceName + ".js";
       } else {
         filePath =
           process.cwd() +
-          "/generatedClasses/AWS/" +
-          dir +
-          "/aws-" +
+          "/generatedClasses/DO/"+
+          dir+
+          "/do-" +
           serviceName.charAt(0).toLowerCase() +
           serviceName.slice(1) +
           ".js";

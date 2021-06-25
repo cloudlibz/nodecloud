@@ -40,7 +40,7 @@ exports.getAST = void 0;
 var fs = require("fs");
 var path = require("path");
 var typescript_1 = require("typescript");
-function getAST(sdkFileInfo) {
+function getAST(sdkFileName) {
     var _this = this;
     return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
         var file, ast, cloned_1, error_1;
@@ -48,7 +48,8 @@ function getAST(sdkFileInfo) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    file = path.join(__dirname, "../../../node_modules/@azure/" + sdkFileInfo.pkgName + "/esm/operations/" + sdkFileInfo.fileName);
+                    file = path.join(__dirname, "../../../node_modules/do-wrapper/dist/modules/" +
+                        sdkFileName.toLowerCase());
                     ast = typescript_1.createSourceFile(file, fs.readFileSync(file).toString(), typescript_1.ScriptTarget.Latest, true);
                     cloned_1 = null;
                     return [4 /*yield*/, ast.forEachChild(function (child) {
