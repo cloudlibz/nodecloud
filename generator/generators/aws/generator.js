@@ -197,7 +197,7 @@ function generateAWSClass(serviceClass, serviceName) {
   var sdkFile = serviceClass[Object.keys(serviceClass)[0]].split(" ")[0];
   parser_1.getAST(sdkFile).then(function(result) {
     return __awaiter(_this, void 0, void 0, function() {
-      var sdkClassAst, classData, output, filePath, e_1;
+      var sdkClassAst, classData, output, filePath, dir, e_1;
       return __generator(this, function(_a) {
         switch (_a.label) {
           case 0:
@@ -211,16 +211,26 @@ function generateAWSClass(serviceClass, serviceName) {
           case 2:
             output = _a.sent();
             filePath = void 0;
+            dir = helper_1.getDir(serviceName);
+            if (
+              !fs.existsSync(process.cwd() + "/generatedClasses/AWS/" + dir)
+            ) {
+              fs.mkdirSync(process.cwd() + "/generatedClasses/AWS/" + dir);
+            }
             if (/^[A-Z]*$/.test(serviceName)) {
               filePath =
                 process.cwd() +
-                "/generatedClasses/AWS/aws-" +
+                "/generatedClasses/AWS/" +
+                dir +
+                "/aws-" +
                 serviceName +
                 ".js";
             } else {
               filePath =
                 process.cwd() +
-                "/generatedClasses/AWS/aws-" +
+                "/generatedClasses/AWS/" +
+                dir +
+                "/aws-" +
                 serviceName.charAt(0).toLowerCase() +
                 serviceName.slice(1) +
                 ".js";

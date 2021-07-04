@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { SyntaxKind, createSourceFile, ScriptTarget } from "typescript";
 import { getAST } from "../../parsers/googleCloud/parser";
-import { filters, groupers, printFile } from "../lib/helper";
+import { filters, groupers, printFile, getDir } from "../lib/helper";
 import { clientBasedTransform } from "../../transformers/googleCloud/clientBasedTransformer";
 import { classBasedTransform } from "../../transformers/googleCloud/classBasedTransformer";
 
@@ -256,16 +256,24 @@ async function generateClassBasedCode(methods, data, serviceName) {
 
   const output = await classBasedTransform(dummyAst, data);
   let filePath;
+  const dir = getDir(serviceName);
+  if (!fs.existsSync(process.cwd() + "/generatedClasses/googleCloud/" + dir)) {
+    fs.mkdirSync(process.cwd() + "/generatedClasses/googleCloud/" + dir);
+  }
   if (/^[A-Z]*$/.test(serviceName)) {
     filePath =
       process.cwd() +
-      "/generatedClasses/googleCloud/gcp-" +
+      "/generatedClasses/googleCloud/" +
+      dir +
+      "/gcp-" +
       serviceName +
       ".js";
   } else {
     filePath =
       process.cwd() +
-      "/generatedClasses/googleCloud/gcp-" +
+      "/generatedClasses/googleCloud/" +
+      dir +
+      "/gcp-" +
       serviceName.charAt(0).toLowerCase() +
       serviceName.slice(1) +
       ".js";
@@ -309,16 +317,24 @@ async function generateClientBasedCode(methods, serviceName) {
 
   const output = await clientBasedTransform(dummyAst, classData);
   let filePath;
+  const dir = getDir(serviceName);
+  if (!fs.existsSync(process.cwd() + "/generatedClasses/googleCloud/" + dir)) {
+    fs.mkdirSync(process.cwd() + "/generatedClasses/googleCloud/" + dir);
+  }
   if (/^[A-Z]*$/.test(serviceName)) {
     filePath =
       process.cwd() +
-      "/generatedClasses/googleCloud/gcp-" +
+      "/generatedClasses/googleCloud/" +
+      dir +
+      "/gcp-" +
       serviceName +
       ".js";
   } else {
     filePath =
       process.cwd() +
-      "/generatedClasses/googleCloud/gcp-" +
+      "/generatedClasses/googleCloud/" +
+      dir +
+      "/gcp-" +
       serviceName.charAt(0).toLowerCase() +
       serviceName.slice(1) +
       ".js";

@@ -1,0 +1,102 @@
+{
+  "className": "Kubernetes",
+  "functions": [
+    {
+      "functionName": "listClusters",
+      "SDKFunctionName": "getClusters",
+      "params": [
+        {
+          "name": "includeAll",
+          "optional": true,
+          "type": "BooleanKeyword",
+          "typeName": null
+        },
+        {
+          "name": "page",
+          "optional": true,
+          "type": "NumberKeyword",
+          "typeName": null
+        },
+        {
+          "name": "pageSize",
+          "optional": true,
+          "type": "NumberKeyword",
+          "typeName": null
+        }
+      ]
+    },
+    {
+      "functionName": "create",
+      "SDKFunctionName": "create",
+      "params": [
+        {
+          "name": "options",
+          "optional": false,
+          "type": "TypeReference",
+          "typeName": "NewClusterRequest"
+        }
+      ]
+    },
+    {
+      "functionName": "delete",
+      "SDKFunctionName": "delete",
+      "params": [
+        {
+          "name": "clusterId",
+          "optional": false,
+          "type": "StringKeyword",
+          "typeName": null
+        }
+      ]
+    },
+    {
+      "functionName": "listNodegroups",
+      "SDKFunctionName": "getNodePools",
+      "params": [
+        {
+          "name": "clusterId",
+          "optional": false,
+          "type": "StringKeyword",
+          "typeName": null
+        },
+        {
+          "name": "includeAll",
+          "optional": true,
+          "type": "BooleanKeyword",
+          "typeName": null
+        },
+        {
+          "name": "page",
+          "optional": true,
+          "type": "NumberKeyword",
+          "typeName": null
+        },
+        {
+          "name": "pageSize",
+          "optional": true,
+          "type": "NumberKeyword",
+          "typeName": null
+        }
+      ]
+    },
+    {
+      "functionName": "createNodeGroup",
+      "SDKFunctionName": "addNodePool",
+      "params": [
+        {
+          "name": "clusterId",
+          "optional": false,
+          "type": "StringKeyword",
+          "typeName": null
+        },
+        {
+          "name": "nodePool",
+          "optional": false,
+          "type": "TypeReference",
+          "typeName": "ClusterNodePool"
+        }
+      ]
+    }
+  ],
+  "serviceName": "Kubernetes"
+}
