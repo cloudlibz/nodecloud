@@ -30,6 +30,7 @@
     "@google-cloud/translate": "^6.0.0",
     "aws-sdk": "^2.686.0",
     "config": "^1.26.1",
+    "do-wrapper": "^4.5.1",
     "js-yaml": "^3.14.0",
     "key-mirror": "^1.0.1",
     "lodash": "^4.17.19",

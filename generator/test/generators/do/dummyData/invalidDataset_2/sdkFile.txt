@@ -1,0 +1,8 @@
+import RequestHelper from "../request-helper";
+import { BaseModule } from "./base-module";
+import { ClusterNodePool, ClusterNodePoolUpdateOptions, NewClusterRequest } from "../types/kubernetes";
+export default class Kubernetes extends BaseModule {
+}
+
+  
+   
