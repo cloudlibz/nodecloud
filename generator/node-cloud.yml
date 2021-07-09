@@ -17,6 +17,12 @@ ComputeInstance:
     reboot: arm-compute virtualMachines.d.ts restart
     destroy: arm-compute virtualMachines.d.ts deleteMethod
   # GCP: This SDK currenlty doesn't contain type definition files
+  DO:
+    create: droplets.d.ts create
+    list: droplets.d.ts getAll
+    destroy: droplets.d.ts deleteById
+    start: droplets.d.ts requestAction
+    stop: droplets.d.ts requestAction
 
 StorageBucket:
   AWS:
@@ -37,6 +43,7 @@ StorageBucket:
     list: storage storage.d.ts getBuckets
     upload: storage bucket.d.ts upload
     makePublic: storage file.d.ts makePublic
+
 
 PaaS:
   AWS:
@@ -103,6 +110,15 @@ Kubernetes:
     describeNodeGroup: eks.d.ts describeNodegroup
     listNodegroups: eks.d.ts listNodegroups
     updateConfig: eks.d.ts updateClusterConfig
+  DO:
+    create: kubernetes.d.ts create 
+    delete: kubernetes.d.ts delete
+    listClusters: kubernetes.d.ts getClusters
+    describeCluster: kubernetes.d.ts getById
+    createNodeGroup: kubernetes.d.ts addNodePool
+    deleteNodegroup: kubernetes.d.ts deleteNodePool
+    describeNodeGroup: kubernetes.d.ts getNodePoolById
+    listNodegroups: kubernetes.d.ts getNodePools
 
 Monitoring:
   GCP:
@@ -147,7 +163,7 @@ NoSqlIndexed:
     query: SimpleDB.d.ts select
     setAttribute: SimpleDB.d.ts putAttributes
     deleteAttribute: SimpleDB.d.ts deleteAttributes
-    getAttributes: SimpleDB.d.ts getAttributes
+    getAttributes: SimpleDB.d.ts getAttributes 
 
 RDBMS:
   AWS:
@@ -171,6 +187,12 @@ RDBMS:
     restoreDatabase: spanner v1 database_admin_client.d.ts restoreDatabase
     deleteDBSnapshot: spanner v1 database_admin_client.d.ts deleteBackup
     databasePath: spanner v1 database_admin_client.d.ts databasePath
+  DO:
+    createCluster: databases.d.ts createCluster
+    getClusters: databases.d.ts getAllClusters
+    getCluster: databases.d.ts getClusterById
+    updateCluster: databases.d.ts resizeCluster
+
 
 NoSql:
   AWS:
@@ -191,6 +213,11 @@ NoSql:
     deleteItem: firestore v1 firestore_client.d.ts deleteDocument
     updateItem: firestore v1 firestore_client.d.ts updateDocument
     query: firestore v1 firestore_client.d.ts runQuery
+  DO:
+    createCluster: databases.d.ts createCluster
+    getClusters: databases.d.ts getAllClusters
+    getCluster: databases.d.ts getClusterById
+    updateCluster: databases.d.ts resizeCluster
 
 DNS:
   AWS:
@@ -210,6 +237,12 @@ DNS:
     listZones: dns index.d.ts getZones
     changeRecordSets: dns zone.d.ts createChange
     record: dns zone.d.ts record
+  DO:
+    createRecord: domains.d.ts createRecord
+    deleteRecord: domains.d.ts deleteRecord
+    getRecords: domains.d.ts getAllRecords
+    getRecord: domains.d.ts getRecord
+    changeRecordSets: domains.d.ts updateRecord
 
 LoadBalancer:
   AWS:
@@ -224,6 +257,11 @@ LoadBalancer:
     list: arm-network loadBalancers.d.ts list
     addTags: arm-network loadBalancers.d.ts updateTags
     describe: arm-network loadBalancers.d.ts get
+  DO:  
+    create: load-balancers.d.ts create
+    delete: load-balancers.d.ts delete
+    list: load-balancers.d.ts getAll
+    update: load-balancers.d.ts update
 
 IAM:
   AWS:
@@ -284,6 +322,11 @@ KeyManagement:
     update: kms v1 key_management_service_client.d.ts updateCryptoKey
     describeKey: kms v1 key_management_service_client.d.ts getCryptoKey
     putKeyPolicy: kms v1 key_management_service_client.d.ts setIamPolicy
+  DO:
+    createKey: keys.d.ts add
+    deleteKey: keys.d.ts delete
+    list: keys.d.ts getAll
+    describeKey: keys.d.ts getById  
 
 NotificationService:
   AWS:
@@ -317,3 +360,10 @@ BlockStorage:
     describe: arm-compute disks.d.ts get
     list: arm-compute disks.d.ts list
     update: arm-compute disks.d.ts update
+  DO:
+    create: volumes.d.ts create
+    delete: volumes.d.ts deleteById
+    list: volumes.d.ts getAll
+    describe: volumes.d.ts getById
+
+

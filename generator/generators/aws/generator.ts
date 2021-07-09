@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { createSourceFile, ScriptTarget, SyntaxKind } from "typescript";
 import { getAST } from "../../parsers/aws/parser";
 import { transform } from "../../transformers/aws/transformer";
-import { filters, groupers, printFile } from "../lib/helper";
+import { filters, groupers, printFile, getDir } from "../lib/helper";
 
 interface FunctionData {
   functionName: string;
@@ -94,13 +94,24 @@ export function generateAWSClass(serviceClass, serviceName) {
       classData.serviceName = serviceName;
       const output = await transform(dummyAst, classData);
       let filePath;
+      const dir = getDir(serviceName);
+      if (!fs.existsSync(process.cwd() + "/generatedClasses/AWS/" + dir)) {
+        fs.mkdirSync(process.cwd() + "/generatedClasses/AWS/" + dir);
+      }
       if (/^[A-Z]*$/.test(serviceName)) {
         filePath =
-          process.cwd() + "/generatedClasses/AWS/aws-" + serviceName + ".js";
+          process.cwd() +
+          "/generatedClasses/AWS/" +
+          dir +
+          "/aws-" +
+          serviceName +
+          ".js";
       } else {
         filePath =
           process.cwd() +
-          "/generatedClasses/AWS/aws-" +
+          "/generatedClasses/AWS/" +
+          dir +
+          "/aws-" +
           serviceName.charAt(0).toLowerCase() +
           serviceName.slice(1) +
           ".js";
